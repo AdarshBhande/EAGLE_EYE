@@ -17,14 +17,16 @@ export const API_BASE_URL = (import.meta as any).env?.VITE_API_BASE_URL || 'http
 
 // Helper to generate SVG Data URIs for evidence items in standalone mode
 function createMockSvgImage(text: string, subtext: string, color: string = '#f43f5e'): string {
+  const safeText = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const safeSubtext = subtext.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
     <rect width="600" height="400" fill="#18181b"/>
     <rect x="20" y="20" width="560" height="360" fill="#27272a" stroke="${color}" stroke-width="3" rx="8" stroke-dasharray="6,6"/>
-    <text x="300" y="160" font-family="monospace" font-size="22" font-weight="bold" fill="${color}" text-anchor="middle">${text}</text>
-    <text x="300" y="210" font-family="sans-serif" font-size="14" fill="#a1a1aa" text-anchor="middle">${subtext}</text>
-    <text x="300" y="340" font-family="monospace" font-size="12" fill="#71717a" text-anchor="middle">EAGLE EYE AI VISION PROOF • DEFECT CARD</text>
+    <text x="300" y="160" font-family="monospace" font-size="22" font-weight="bold" fill="${color}" text-anchor="middle">${safeText}</text>
+    <text x="300" y="210" font-family="sans-serif" font-size="14" fill="#a1a1aa" text-anchor="middle">${safeSubtext}</text>
+    <text x="300" y="340" font-family="monospace" font-size="12" fill="#71717a" text-anchor="middle">EAGLE EYE AI VISION PROOF - DEFECT CARD</text>
   </svg>`;
-  return `data:image/svg+xml;base64,${btoa(svg)}`;
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 }
 
 // LocalStorage Persistence Keys for Standalone Mode
