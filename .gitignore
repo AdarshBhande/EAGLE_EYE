@@ -1,0 +1,41 @@
+# Node / Frontend
+node_modules/
+dist/
+dist-ssr/
+*.local
+.env
+.env.*
+
+# Python / Backend
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+env/
+venv/
+ENV/
+.venv/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Heavy Datasets & Model Training Weights (Roboflow/YOLO)
+datasets/
+runs/
+*.pt
+
+# Database & Storage runtime data
+*.db
+*.sqlite3
+storage/evidence/crops/*
+storage/evidence/annotated/*
+storage/evidence/cards/*
+
+# Agent Logs & Cache
+.agent/
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
