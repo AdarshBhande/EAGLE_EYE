@@ -30,20 +30,34 @@ function createMockSvgImage(text: string, subtext: string, color: string = '#f43
 }
 
 // LocalStorage Persistence Keys for Standalone Mode
-const STORAGE_INSPECTIONS_KEY = 'eagle_eye_inspections_db';
-const STORAGE_RECHECKS_KEY = 'eagle_eye_rechecks_db';
+const STORAGE_INSPECTIONS_KEY = 'eagle_eye_inspections_v3';
+const STORAGE_RECHECKS_KEY = 'eagle_eye_rechecks_v3';
 
 function getStoredInspections(): PersistedInspection[] {
   try {
+    // Purge legacy keys if present
+    localStorage.removeItem('eagle_eye_inspections_db');
+    localStorage.removeItem('eagle_eye_rechecks_db');
+
     const raw = localStorage.getItem(STORAGE_INSPECTIONS_KEY);
     if (!raw) {
       const initial = generateSeedInspections();
       localStorage.setItem(STORAGE_INSPECTIONS_KEY, JSON.stringify(initial));
       return initial;
     }
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed) || parsed.length === 0 || JSON.stringify(parsed).includes('base64,')) {
+      const initial = generateSeedInspections();
+      localStorage.setItem(STORAGE_INSPECTIONS_KEY, JSON.stringify(initial));
+      return initial;
+    }
+    return parsed;
   } catch {
-    return generateSeedInspections();
+    const initial = generateSeedInspections();
+    try {
+      localStorage.setItem(STORAGE_INSPECTIONS_KEY, JSON.stringify(initial));
+    } catch {}
+    return initial;
   }
 }
 
